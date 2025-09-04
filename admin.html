@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>TripFast — Admin Claims</title>
+  <style>body{font-family:system-ui,Arial;margin:24px;background:#0b1220;color:#eaf2ff} .card{background:#10192e;border:1px solid #1e2a44;border-radius:12px;padding:16px;max-width:560px} input,select,button{padding:10px;border-radius:10px;border:1px solid #233355;background:#0c1530;color:#eaf2ff} label{display:block;margin:8px 0 4px;color:#9db3cf} button{cursor:pointer} .row{display:grid;grid-template-columns:1fr 1fr;gap:10px} .muted{color:#9db3cf}</style>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
+    import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-functions.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIBq4ZsRADoKRNoJZkNq-dLWirlSotIPc",
+      authDomain: "tripfast-d359d.firebaseapp.com",
+      projectId: "tripfast-d359d",
+      storageBucket: "tripfast-d359d.appspot.com",
+      messagingSenderId: "559477235356",
+      appId: "1:559477235356:web:a311792f680f5fd5995759"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const functions = getFunctions(app);
+    const setClaims = httpsCallable(functions, 'setDriverClaims');
+
+    async function doLogin(){
+      const email = prompt('Email admin:');
+      const pass = prompt('Password:');
+      await signInWithEmailAndPassword(auth, email, pass);
+      alert('Login OK');
+    }
+    async function setDriver(){
+      const uid = document.getElementById('uid').value.trim();
+      const driverId = document.getElementById('driverId').value;
+      if(!uid) return alert('UID requerido');
+      await setClaims({ uid, driver_id: driverId });
+      alert('Claims asignados ✔️');
+    }
+    window.doLogin = doLogin;
+    window.setDriver = setDriver;
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h2>Admin — Asignar driver_id</h2>
+    <p class="muted">Inicia sesión con una cuenta admin (dispatcher) y asigna <code>driver_id</code> a un UID.</p>
+    <button onclick="doLogin()">Login admin</button>
+    <div style="height:10px"></div>
+    <label>UID del usuario (desde Authentication → Usuarios)</label>
+    <input id="uid" placeholder="pega aquí el UID" />
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label>driver_id</label>
+        <select id="driverId">
+          <option value="d1">d1</option>
+          <option value="d2">d2</option>
+          <option value="d3">d3</option>
+          <option value="d4">d4</option>
+          <option value="d5">d5</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button onclick="setDriver()">Asignar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

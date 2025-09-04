@@ -1,0 +1,28 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthed() { return request.auth != null; }
+
+    match /drivers/{driverId} { allow read: if isAuthed(); allow write: if false; }
+
+    match /devices/{deviceId} {
+      allow read, write: if isAuthed() && request.resource.data.driver_id == request.auth.token.driver_id;
+    }
+
+    match /jobs/{jobId} {
+      allow create: if isAuthed();
+      allow read, update: if isAuthed() && (
+        request.auth.token.role == 'dispatcher' ||
+        resource.data.driver_id == request.auth.token.driver_id
+      );
+      allow delete: if false;
+    }
+
+    match /job_events/{evtId} {
+      allow create, read: if isAuthed();
+      allow update, delete: if false;
+    }
+  }
+}
+
