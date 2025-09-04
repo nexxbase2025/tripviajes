@@ -1,70 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>TripFast — Admin Claims</title>
-  <style>body{font-family:system-ui,Arial;margin:24px;background:#0b1220;color:#eaf2ff} .card{background:#10192e;border:1px solid #1e2a44;border-radius:12px;padding:16px;max-width:560px} input,select,button{padding:10px;border-radius:10px;border:1px solid #233355;background:#0c1530;color:#eaf2ff} label{display:block;margin:8px 0 4px;color:#9db3cf} button{cursor:pointer} .row{display:grid;grid-template-columns:1fr 1fr;gap:10px} .muted{color:#9db3cf}</style>
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
-    import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-functions.js';
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBIBq4ZsRADoKRNoJZkNq-dLWirlSotIPc",
-      authDomain: "tripfast-d359d.firebaseapp.com",
-      projectId: "tripfast-d359d",
-      storageBucket: "tripfast-d359d.appspot.com",
-      messagingSenderId: "559477235356",
-      appId: "1:559477235356:web:a311792f680f5fd5995759"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const functions = getFunctions(app);
-    const setClaims = httpsCallable(functions, 'setDriverClaims');
-
-    async function doLogin(){
-      const email = prompt('Email admin:');
-      const pass = prompt('Password:');
-      await signInWithEmailAndPassword(auth, email, pass);
-      alert('Login OK');
-    }
-    async function setDriver(){
-      const uid = document.getElementById('uid').value.trim();
-      const driverId = document.getElementById('driverId').value;
-      if(!uid) return alert('UID requerido');
-      await setClaims({ uid, driver_id: driverId });
-      alert('Claims asignados ✔️');
-    }
-    window.doLogin = doLogin;
-    window.setDriver = setDriver;
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TripFast — Admin</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;padding:24px;max-width:720px;margin:0 auto;background:#0b1220;color:#eaf2ff}
+    .card{background:#10192e;border:1px solid #1e2a44;border-radius:14px;padding:16px;margin-bottom:16px}
+    label{font-size:13px;color:#9db3cf;display:block;margin:6px 0}
+    input,select,button{padding:10px 12px;border-radius:10px;border:1px solid #203154;background:#0c1530;color:#eaf2ff}
+    button{cursor:pointer}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  </style>
 </head>
 <body>
+  <h1>TripFast — Admin</h1>
+  <p>Inicia sesión con tu cuenta de <b>dispatcher</b>, pega el <b>UID</b> del conductor y asígnale un <b>driver_id</b> (d1..d5).</p>
   <div class="card">
-    <h2>Admin — Asignar driver_id</h2>
-    <p class="muted">Inicia sesión con una cuenta admin (dispatcher) y asigna <code>driver_id</code> a un UID.</p>
-    <button onclick="doLogin()">Login admin</button>
-    <div style="height:10px"></div>
-    <label>UID del usuario (desde Authentication → Usuarios)</label>
-    <input id="uid" placeholder="pega aquí el UID" />
-    <div class="row" style="margin-top:10px">
+    <button id="btnLogin">Iniciar sesión</button>
+    <button id="btnLogout" style="display:none">Cerrar sesión</button>
+    <div id="who" style="margin-top:8px;color:#9db3cf"></div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>UID del usuario (conductor)</label>
+        <input id="uid" placeholder="pega aquí el UID">
+      </div>
       <div>
         <label>driver_id</label>
-        <select id="driverId">
-          <option value="d1">d1</option>
-          <option value="d2">d2</option>
-          <option value="d3">d3</option>
-          <option value="d4">d4</option>
-          <option value="d5">d5</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:flex-end">
-        <button onclick="setDriver()">Asignar</button>
+        <select id="driverId"><option>d1</option><option>d2</option><option>d3</option><option>d4</option><option>d5</option></select>
       </div>
     </div>
+    <div style="margin-top:10px"><button id="btnAssign">Asignar claims</button></div>
+    <div id="out" style="margin-top:8px;color:#9db3cf"></div>
   </div>
+  <script type="module">
+    import { auth, onAuth, login, logout, setDriverClaims } from './firebase.js';
+    const btnLogin=document.getElementById('btnLogin');
+    const btnLogout=document.getElementById('btnLogout');
+    const who=document.getElementById('who');
+    const btnAssign=document.getElementById('btnAssign');
+    const uidEl=document.getElementById('uid');
+    const drvSel=document.getElementById('driverId');
+    const out=document.getElementById('out');
+    onAuth(user=>{if(user){who.textContent='Conectado como: '+(user.email||user.uid);btnLogin.style.display='none';btnLogout.style.display='inline-flex'}else{who.textContent='No autenticado';btnLogin.style.display='inline-flex';btnLogout.style.display='none'}});
+    btnLogin.onclick=async()=>{const email=prompt('Email');if(!email)return;const pass=prompt('Contraseña');if(!pass)return;try{await login(email,pass)}catch(e){alert(e.message||String(e))}};
+    btnLogout.onclick=()=>logout();
+    btnAssign.onclick=async()=>{const uid=uidEl.value.trim();const driver_id=drvSel.value;if(!uid)return alert('UID requerido');try{out.textContent='Asignando…';await setDriverClaims(uid,driver_id);out.textContent='Listo ✔️'}catch(e){out.textContent='Error: '+(e.message||String(e))}};
+  </script>
 </body>
 </html>
-

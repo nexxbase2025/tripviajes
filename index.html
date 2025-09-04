@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,17 +10,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <style>
-    :root{
-      --brand:#0ea5ff; /* azul */
-      --ink:#eaf2ff;   /* blanco azulado */
-      --bg:#0b1220;    /* negro azulado */
-      --card:#10192e;  /* panel */
-      --muted:#9db3cf; /* texto secundario */
-      --ok:#22c55e; --warn:#fbbf24; --no:#ef4444;
-    }
+    :root{--brand:#0ea5ff;--ink:#eaf2ff;--bg:#0b1220;--card:#10192e;--muted:#9db3cf;--ok:#22c55e;--warn:#fbbf24;--no:#ef4444}
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth; max-width:100%; overflow-x:hidden;}
-    body{margin:0;background:linear-gradient(180deg,#0b1220,#08101f);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;max-width:100%;overflow-x:hidden;}
+    html{scroll-behavior:smooth;max-width:100%;overflow-x:hidden}
+    body{margin:0;background:linear-gradient(180deg,#0b1220,#08101f);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;max-width:100%;overflow-x:hidden}
     header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid #1e2a44;background:#0b1220;position:sticky;top:0;z-index:10}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.6px}
     .logo svg{width:34px;height:34px}
@@ -36,7 +28,7 @@
     .row{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-bottom:10px}
     .col-6{grid-column:span 6}.col-4{grid-column:span 4}.col-8{grid-column:span 8}
     .col-3{grid-column:span 3}.col-12{grid-column:span 12}.col-2{grid-column:span 2}
-    .row > *, .grid > * {min-width:0;}
+    .row > *, .grid > *{min-width:0}
     .pill{display:inline-flex;align-items:center;gap:8px;background:#0a1330;border:1px solid #203154;border-radius:999px;padding:8px 12px;font-size:12px}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #2a3d66;background:linear-gradient(180deg,#0e1b38,#0d1a33);padding:10px 14px;border-radius:12px;color:var(--ink);text-decoration:none;cursor:pointer}
     .btn:hover{border-color:#32508e}
@@ -46,31 +38,17 @@
     .muted{color:var(--muted)}
     .hr{height:1px;background:#1e2a44;margin:12px 0}
     .tag{font-size:11px;opacity:.75}
-    .preview{
-      white-space:pre-wrap;
-      background:#0a1226;
-      border:1px dashed #30456f;
-      border-radius:12px;
-      padding:12px;
-      overflow-wrap:anywhere;
-      word-break:break-word;
-      max-width:100%;
-    }
+    .preview{white-space:pre-wrap;background:#0a1226;border:1px dashed #30456f;border-radius:12px;padding:12px;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
     .note{font-size:12px;color:var(--muted)}
     .footer{font-size:12px;color:var(--muted);text-align:center;margin:18px 0}
     .linkish{color:var(--ink);opacity:.9}
     .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .kpi{background:#0c1630;border:1px solid #22345a;border-radius:12px;padding:10px}
     .kpi b{font-size:18px}
-    @media print{
-      header,.no-print{display:none !important}
-      body{background:white;color:black}
-      .card{border:none;box-shadow:none}
-      .preview{background:white;border:1px solid #ccc}
-    }
+    @media print{header,.no-print{display:none !important}body{background:#fff;color:#000}.card{border:none;box-shadow:none}.preview{background:#fff;border:1px solid #ccc}}
     dialog{background:#0c1530;border:1px solid #2a3d66;color:var(--ink);border-radius:14px;max-width:520px}
-    .inline-check{display:inline-flex;align-items:center;gap:6px;}
-    .inline-check input[type="checkbox"]{margin:0;}
+    .inline-check{display:inline-flex;align-items:center;gap:6px}
+    .inline-check input[type="checkbox"]{margin:0}
   </style>
 </head>
 <body>
@@ -96,15 +74,13 @@
         <option value="en">EN</option>
       </select>
 
-      <!-- NUEVO: Login/Logout -->
-      <button id="btnLogin" class="btn ghost" data-i18n="btn_login">Login</button>
+      <button id="btnLogin" class="btn ghost" data-i18n="btn_login">Iniciar sesión</button>
       <button id="btnLogout" class="btn ghost" style="display:none" data-i18n="btn_logout">Cerrar sesión</button>
     </div>
   </header>
 
   <div class="wrap">
-    <div class="grid">
-      <!-- === Tu formulario existente (SIN CAMBIOS) === -->
+    <div class="grid" id="consoleGrid" style="display:none">
       <section class="card" id="formCard">
         <h2 data-i18n="title_form">Nuevo despacho</h2>
         <div class="row">
@@ -127,6 +103,14 @@
           <div class="col-12">
             <label data-i18n="lbl_drop">Destino</label>
             <input id="to" data-i18n-placeholder="ph_to" placeholder="Dirección o referencia…" />
+          </div>
+          <div class="col-12">
+            <label data-i18n="lbl_start">Inicio (opcional, ciudad/base del conductor)</label>
+            <input id="start" data-i18n-placeholder="ph_start" placeholder="Ej: Azogues"/>
+          </div>
+          <div class="col-12">
+            <label data-i18n="lbl_stops">Paradas intermedias (opcional)</label>
+            <textarea id="stops" data-i18n-placeholder="ph_stops" placeholder="Ej: Biblián&#10;(una por línea)"></textarea>
           </div>
           <div class="col-6">
             <label data-i18n="lbl_passenger">Pasajero</label>
@@ -210,7 +194,6 @@
     <div class="footer no-print">© <span id="year"></span> TRIP FAST • <a class="linkish" href="#" id="openHowTo" data-i18n="lnk_howto">Cómo instalar</a></div>
   </div>
 
-  <!-- NUEVO: Vista del Conductor -->
   <section id="driverView" class="wrap" style="display:none">
     <div class="card">
       <h2 data-i18n="title_driver">Conductor</h2>
@@ -223,52 +206,16 @@
     </div>
   </section>
 
-  <!-- 1) Importa Firebase (módulo propio) -->
   <script type="module" src="./firebase.js"></script>
 
-  <!-- 2) Tu JS ORIGINAL (idéntico) -->
   <script>
-    const DICT = {
-      es: {
-        title_form:"Nuevo despacho", lbl_client:"Cliente / Solicitante", lbl_client_phone:"Teléfono del cliente",
-        lbl_pick:"Punto de recogida (origen)", lbl_pick_time:"Hora/Fecha", lbl_drop:"Destino",
-        lbl_passenger:"Pasajero", lbl_age:"Edad", lbl_companions:"Acompañantes", lbl_needs:"Necesidades / Accesibilidad",
-        need_wheel:"Silla de ruedas", need_bari:"Silla bariátrica", need_stret:"Camilla", need_oxy:"Oxígeno",
-        need_extra:"Requiere personal adicional", lbl_floor:"Piso destino", lbl_no_elev:"¿Sin ascensor?",
-        opt_no:"No", opt_yes:"Sí", lbl_steps:"# escalones", lbl_price:"Precio (USD)", lbl_notes:"Notas",
-        lbl_driver:"Conductor / Vehículo", btn_preview:"Generar resumen", btn_map:"Abrir mapa", btn_print:"Imprimir",
-        lbl_preview:"Vista previa del mensaje", title_fleet:"Flota (5 por defecto, editable)",
-        kpi_today:"Despachos hoy", kpi_pending:"Pendientes", kpi_drivers:"Conductores",
-        btn_add_driver:"Añadir conductor",
-        btn_setup_backup:"Configurar respaldo",
-        btn_backup_now:"Guardar ahora",
-
-        ph_client_name:"Nombre y contacto",
-        ph_from:"Dirección exacta…",
-        ph_to:"Dirección o referencia…",
-        ph_passenger:"Nombres y apellidos",
-        ph_notes:"Indicaciones adicionales…",
-
-        btn_reset_fleet:"Restablecer flota",
-        ttl_reset_fleet:"Volver a los 5 por defecto",
-        btn_delete:"Eliminar",
-        lnk_howto:"Cómo instalar en iphone/ipad",
-        dlg_howto_title:"Instalar en iPhone/iPad",
-        dlg_howto_steps:"1) Abre en Safari · 2) Toca <b>Compartir</b> · 3) <b>Añadir a pantalla de inicio</b> · 4) Confirmar.",
-        btn_ok:"OK",
-
-        // NUEVO (i18n extra)
-        btn_login:"Iniciar sesión",
-        btn_logout:"Cerrar sesión",
-        title_driver:"Conductor",
-        lbl_available:"Disponible",
-        btn_register_push:"Activar notificaciones",
-
-        msg_subject:"TRIP FAST — Despacho",
-        msg_template:(o)=>`Cliente: ${o.clientName} (${o.clientPhone})
+    const DICT={es:{title_form:"Nuevo despacho",lbl_client:"Cliente / Solicitante",lbl_client_phone:"Teléfono del cliente",lbl_pick:"Punto de recogida (origen)",lbl_pick_time:"Hora/Fecha",lbl_drop:"Destino",lbl_passenger:"Pasajero",lbl_age:"Edad",lbl_companions:"Acompañantes",lbl_needs:"Necesidades / Accesibilidad",need_wheel:"Silla de ruedas",need_bari:"Silla bariátrica",need_stret:"Camilla",need_oxy:"Oxígeno",need_extra:"Requiere personal adicional",lbl_floor:"Piso destino",lbl_no_elev:"¿Sin ascensor?",opt_no:"No",opt_yes:"Sí",lbl_steps:"# escalones",lbl_price:"Precio (USD)",lbl_notes:"Notas",lbl_driver:"Conductor / Vehículo",btn_preview:"Generar resumen",btn_map:"Abrir mapa",btn_print:"Imprimir",lbl_preview:"Vista previa del mensaje",title_fleet:"Flota (5 por defecto, editable)",kpi_today:"Despachos hoy",kpi_pending:"Pendientes",kpi_drivers:"Conductores",btn_add_driver:"Añadir conductor",btn_setup_backup:"Configurar respaldo",btn_backup_now:"Guardar ahora",ph_client_name:"Nombre y contacto",ph_from:"Dirección exacta…",ph_to:"Dirección o referencia…",ph_passenger:"Nombres y apellidos",ph_notes:"Indicaciones adicionales…",btn_reset_fleet:"Restablecer flota",ttl_reset_fleet:"Volver a los 5 por defecto",btn_delete:"Eliminar",lnk_howto:"Cómo instalar en iphone/ipad",dlg_howto_title:"Instalar en iPhone/iPad",dlg_howto_steps:"1) Abre en Safari · 2) Toca <b>Compartir</b> · 3) <b>Añadir a pantalla de inicio</b> · 4) Confirmar.",btn_ok:"OK",btn_login:"Iniciar sesión",btn_logout:"Cerrar sesión",title_driver:"Conductor",lbl_available:"Disponible",btn_register_push:"Activar notificaciones",lbl_start:"Inicio (opcional, ciudad/base del conductor)",ph_start:"Ej: Azogues",lbl_stops:"Paradas intermedias (opcional)",ph_stops:"Ej: Biblián
+(una por línea)",msg_subject:"TRIP FAST — Despacho",msg_template:o=>`Cliente: ${o.clientName} (${o.clientPhone})
 Paciente: ${o.passenger} • Edad: ${o.age||"-"} • Acompañantes: ${o.companions}
 Origen: ${o.from} 
 Destino: ${o.to} 
+Inicio: ${o.start||'-'}
+Paradas: ${ (o.stops && o.stops.length) ? o.stops.join(' • ') : '-' }
 Fecha/Hora: ${o.pickupAt}
 Accesibilidad: ${o.acc}
 Edificio: Piso ${o.floor} • ${o.noElev==='yes'?'Sin ascensor':'Ascensor'} • Escalones: ${o.steps}
@@ -279,61 +226,13 @@ RUTA: ${o.mapUrl}
 
 Asignado a: ${o.driver.name} (${o.driver.vehicle}) • ${o.driver.phone}
 Placa: ${o.driver.plate}
-`,
-
-        dlg_pending_title:"🔔 Pendientes",
-        pending_none:"No hay pendientes.",
-        pending_empty:"(vacío)",
-        pending_count_one:"Tienes 1 pendiente.",
-        pending_count_many:"Tienes {n} pendientes.",
-        btn_pending_clear:"Vaciar todos",
-        btn_close:"Cerrar",
-        btn_pending_resolve:"Marcar resuelto",
-        btn_pending_remove:"Eliminar",
-        btn_pending_preview:"Ver resumen",
-        confirm_pending_clear:"¿Vaciar todos los pendientes? Esta acción no se puede deshacer.",
-        title_pending_manage:"Ver/gestionar pendientes",
-      },
-      en: {
-        title_form:"New dispatch", lbl_client:"Client / Requester", lbl_client_phone:"Client phone",
-        lbl_pick:"Pickup (origin)", lbl_pick_time:"Date/Time", lbl_drop:"Dropoff (destination)",
-        lbl_passenger:"Passenger", lbl_age:"Age", lbl_companions:"Companions", lbl_needs:"Needs / Accessibility",
-        need_wheel:"Wheelchair", need_bari:"Bariatric chair", need_stret:"Stretcher", need_oxy:"Oxygen",
-        need_extra:"Extra staff required", lbl_floor:"Floor", lbl_no_elev:"No elevator?",
-        opt_no:"No", opt_yes:"Yes", lbl_steps:"# steps", lbl_price:"Price (USD)", lbl_notes:"Notes",
-        lbl_driver:"Driver / Vehicle", btn_preview:"Generate summary", btn_map:"Open map", btn_print:"Print",
-        lbl_preview:"Message preview", title_fleet:"Fleet (5 default, editable)",
-        kpi_today:"Jobs today", kpi_pending:"Pending", kpi_drivers:"Drivers",
-        btn_add_driver:"Add driver",
-        btn_setup_backup:"Setup backup",
-        btn_backup_now:"Save now",
-
-        ph_client_name:"Name & contact",
-        ph_from:"Exact address…",
-        ph_to:"Address or reference…",
-        ph_passenger:"First and last name",
-        ph_notes:"Additional instructions…",
-
-        btn_reset_fleet:"Reset fleet",
-        ttl_reset_fleet:"Revert to default 5",
-        btn_delete:"Delete",
-        lnk_howto:"How to install on iphone/ipad",
-        dlg_howto_title:"Install on iPhone/iPad",
-        dlg_howto_steps:"1) Open in Safari · 2) Tap <b>Share</b> · 3) <b>Add to Home Screen</b> · 4) Confirm.",
-        btn_ok:"OK",
-
-        // NUEVO (i18n extra)
-        btn_login:"Login",
-        btn_logout:"Logout",
-        title_driver:"Driver",
-        lbl_available:"Available",
-        btn_register_push:"Enable notifications",
-
-        msg_subject:"TRIP FAST — Dispatch",
-        msg_template:(o)=>`Client: ${o.clientName} (${o.clientPhone})
+`,dlg_pending_title:"🔔 Pendientes",pending_none:"No hay pendientes.",pending_empty:"(vacío)",pending_count_one:"Tienes 1 pendiente.",pending_count_many:"Tienes {n} pendientes.",btn_pending_clear:"Vaciar todos",btn_close:"Cerrar",btn_pending_resolve:"Marcar resuelto",btn_pending_remove:"Eliminar",btn_pending_preview:"Ver resumen",confirm_pending_clear:"¿Vaciar todos los pendientes? Esta acción no se puede deshacer.",title_pending_manage:"Ver/gestionar pendientes"},en:{title_form:"New dispatch",lbl_client:"Client / Requester",lbl_client_phone:"Client phone",lbl_pick:"Pickup (origin)",lbl_pick_time:"Date/Time",lbl_drop:"Dropoff (destination)",lbl_passenger:"Passenger",lbl_age:"Age",lbl_companions:"Companions",lbl_needs:"Needs / Accessibility",need_wheel:"Wheelchair",need_bari:"Bariatric chair",need_stret:"Stretcher",need_oxy:"Oxygen",need_extra:"Extra staff required",lbl_floor:"Floor",lbl_no_elev:"No elevator?",opt_no:"No",opt_yes:"Yes",lbl_steps:"# steps",lbl_price:"Price (USD)",lbl_notes:"Notes",lbl_driver:"Driver / Vehicle",btn_preview:"Generate summary",btn_map:"Open map",btn_print:"Print",lbl_preview:"Message preview",title_fleet:"Fleet (5 default, editable)",kpi_today:"Jobs today",kpi_pending:"Pending",kpi_drivers:"Drivers",btn_add_driver:"Add driver",btn_setup_backup:"Setup backup",btn_backup_now:"Save now",ph_client_name:"Name & contact",ph_from:"Exact address…",ph_to:"Address or reference…",ph_passenger:"First and last name",ph_notes:"Additional instructions…",btn_reset_fleet:"Reset fleet",ttl_reset_fleet:"Revert to default 5",btn_delete:"Delete",lnk_howto:"How to install on iphone/ipad",dlg_howto_title:"Install on iPhone/iPad",dlg_howto_steps:"1) Open in Safari · 2) Tap <b>Share</b> · 3) <b>Add to Home Screen</b> · 4) Confirm.",btn_ok:"OK",btn_login:"Login",btn_logout:"Logout",title_driver:"Driver",lbl_available:"Available",btn_register_push:"Enable notifications",lbl_start:"Start (optional, driver's base/city)",ph_start:"e.g., Azogues",lbl_stops:"Intermediate stops (optional)",ph_stops:"e.g., Biblián
+(one per line)",msg_subject:"TRIP FAST — Dispatch",msg_template:o=>`Client: ${o.clientName} (${o.clientPhone})
 Passenger: ${o.passenger} • Age: ${o.age||"-"} • Companions: ${o.companions}
 Pickup: ${o.from} 
 Dropoff: ${o.to} 
+Start: ${o.start||'-'}
+Stops: ${ (o.stops && o.stops.length) ? o.stops.join(' • ') : '-' }
 When: ${o.pickupAt}
 Accessibility: ${o.acc}
 Building: Floor ${o.floor} • ${o.noElev==='yes'?'No elevator':'Elevator'} • Steps: ${o.steps}
@@ -344,597 +243,113 @@ ROUTE: ${o.mapUrl}
 
 Assigned to: ${o.driver.name} (${o.driver.vehicle}) • ${o.driver.phone}
 Plate: ${o.driver.plate}
-`,
+`,dlg_pending_title:"🔔 Pending",pending_none:"No pending items.",pending_empty:"(empty)",pending_count_one:"You have 1 pending item.",pending_count_many:"You have {n} pending items.",btn_pending_clear:"Clear all",btn_close:"Close",btn_pending_resolve:"Mark resolved",btn_pending_remove:"Delete",btn_pending_preview:"View summary",confirm_pending_clear:"Clear all pending items? This cannot be undone.",title_pending_manage:"View/manage pending"}};
 
-        dlg_pending_title:"🔔 Pending",
-        pending_none:"No pending items.",
-        pending_empty:"(empty)",
-        pending_count_one:"You have 1 pending item.",
-        pending_count_many:"You have {n} pending items.",
-        btn_pending_clear:"Clear all",
-        btn_close:"Close",
-        btn_pending_resolve:"Mark resolved",
-        btn_pending_remove:"Delete",
-        btn_pending_preview:"View summary",
-        confirm_pending_clear:"Clear all pending items? This cannot be undone.",
-        title_pending_manage:"View/manage pending",
-      }
-    };
+    function getLang(){const forced=localStorage.getItem('tf_lang_forced');if(forced&&forced!=='auto')return forced;return (navigator.language||'es').toLowerCase().startsWith('es')?'es':'en'}
+    function applyI18n(){const lang=getLang();document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');const t=DICT[lang][k];if(t!=null) el.innerHTML=t});document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.getAttribute('data-i18n-placeholder');const t=DICT[lang][k];if(t!=null) el.setAttribute('placeholder',t)});document.querySelectorAll('[data-i18n-title]').forEach(el=>{const k=el.getAttribute('data-i18n-title');const t=DICT[lang][k];if(t!=null) el.setAttribute('title',t)})}
 
-    function getLang(){
-      const forced = localStorage.getItem('tf_lang_forced');
-      if(forced && forced !== 'auto') return forced;
-      return (navigator.language||'es').toLowerCase().startsWith('es')?'es':'en';
-    }
-
-    function applyI18n(){
-      const lang = getLang();
-      document.querySelectorAll('[data-i18n]').forEach(el=>{
-        const key = el.getAttribute('data-i18n');
-        const txt = DICT[lang][key];
-        if(txt != null) el.innerHTML = txt;
-      });
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
-        const key = el.getAttribute('data-i18n-placeholder');
-        const txt = DICT[lang][key];
-        if(txt != null) el.setAttribute('placeholder', txt);
-      });
-      document.querySelectorAll('[data-i18n-title]').forEach(el=>{
-        const key = el.getAttribute('data-i18n-title');
-        const txt = DICT[lang][key];
-        if(txt != null) el.setAttribute('title', txt);
-      });
-    }
-
-    const DEFAULT_DRIVERS = [
-      {id:'d1', name:'Luis Beltran', phone:'+593983706294', whatsapp:'+593983706294', email:'donbeltranmusic@gmail.com', vehicle:'Toyota Hiace', plate:'TBA-1234', capacity:4, wheelchair:true},
-      {id:'d2', name:'Ana Morales', phone:'+593991112233', whatsapp:'+593991112233', email:'driver02@tripfast.app', vehicle:'Renault Kangoo', plate:'PBC-5678', capacity:3, wheelchair:true},
-      {id:'d3', name:'Luis Herrera', phone:'+593972223344', whatsapp:'+593972223344', email:'driver03@tripfast.app', vehicle:'Hyundai H1', plate:'GHY-9012', capacity:4, wheelchair:true},
-      {id:'d4', name:'Carla Vega', phone:'+593963334455', whatsapp:'+593963334455', email:'driver04@tripfast.app', vehicle:'Chevrolet N300', plate:'ABC-3456', capacity:3, wheelchair:false},
-      {id:'d5', name:'Diego Suárez', phone:'+593954445566', whatsapp:'+593954445566', email:'driver05@tripfast.app', vehicle:'Ford Transit', plate:'DEF-7890', capacity:6, wheelchair:true},
+    const DEFAULT_DRIVERS=[
+      {id:'d1',name:'Luis Beltran',phone:'+593983706294',whatsapp:'+593983706294',email:'donbeltranmusic@gmail.com',vehicle:'Toyota Hiace',plate:'TBA-1234',capacity:4,wheelchair:true},
+      {id:'d2',name:'Ana Morales',phone:'+593991112233',whatsapp:'+593991112233',email:'driver02@tripfast.app',vehicle:'Renault Kangoo',plate:'PBC-5678',capacity:3,wheelchair:true},
+      {id:'d3',name:'Luis Herrera',phone:'+593972223344',whatsapp:'+593972223344',email:'driver03@tripfast.app',vehicle:'Hyundai H1',plate:'GHY-9012',capacity:4,wheelchair:true},
+      {id:'d4',name:'Carla Vega',phone:'+593963334455',whatsapp:'+593963334455',email:'driver04@tripfast.app',vehicle:'Chevrolet N300',plate:'ABC-3456',capacity:3,wheelchair:false},
+      {id:'d5',name:'Diego Suárez',phone:'+593954445566',whatsapp:'+593954445566',email:'driver05@tripfast.app',vehicle:'Ford Transit',plate:'DEF-7890',capacity:6,wheelchair:true},
     ];
-    function loadFleet(){
-      const fromLS = localStorage.getItem('tf_fleet');
-      return fromLS? JSON.parse(fromLS) : DEFAULT_DRIVERS;
-    }
-    function saveFleet(list){ localStorage.setItem('tf_fleet', JSON.stringify(list)); }
+    function loadFleet(){const fromLS=localStorage.getItem('tf_fleet');return fromLS?JSON.parse(fromLS):DEFAULT_DRIVERS}
+    function saveFleet(list){localStorage.setItem('tf_fleet',JSON.stringify(list))}
+    const $=s=>document.querySelector(s);const $$=s=>Array.from(document.querySelectorAll(s));
+    const yearEl=$('#year'); if(yearEl) yearEl.textContent=new Date().getFullYear();
+    let fleet=loadFleet();
+    function getIntLS(key){return parseInt(localStorage.getItem(key)||'0',10)}
+    function setKPI(id,n){document.getElementById(id).textContent=String(n);if(id==='kpiToday')localStorage.setItem('tf_today',n);if(id==='kpiPending')localStorage.setItem('tf_pending',n)}
+    function incToday(){setKPI('kpiToday',getIntLS('tf_today')+1)}
+    const PENDING_KEY='tf_pending_list';
+    function getPendingList(){try{return JSON.parse(localStorage.getItem(PENDING_KEY)||'[]')}catch{return[]}}
+    function setPendingList(list){localStorage.setItem(PENDING_KEY,JSON.stringify(list))}
+    function incPending(){setKPI('kpiPending',getIntLS('tf_pending')+1);const data=collect();const item={id:'p'+Date.now(),when:Date.now(),client:data.clientName||'(Sin cliente)',passenger:data.passenger||'(Sin Pasajero)',from:data.from||'',to:data.to||'',driver:data?.driver?.name||'',price:data.price||'',preview:DICT[getLang()].msg_template(data)};const list=getPendingList();list.push(item);setPendingList(list)}
+    function decPending(){const cur=Math.max(0,getIntLS('tf_pending')-1);setKPI('kpiPending',cur);const list=getPendingList();list.shift();setPendingList(list)}
 
-    const $ = (s)=>document.querySelector(s);
-    const $$ = (s)=>Array.from(document.querySelectorAll(s));
-    const yearEl = $('#year'); yearEl.textContent = new Date().getFullYear();
+    function paintFleet(){$('#kpiDrivers').textContent=fleet.length;const driverSel=$('#driverSel');driverSel.innerHTML='';fleet.forEach(d=>{const opt=document.createElement('option');opt.value=d.id;opt.textContent=`${d.name} • ${d.vehicle} • ${d.plate}`;driverSel.appendChild(opt)});const lang=getLang();const list=document.getElementById('fleetList');list.innerHTML=fleet.map(d=>`<div class="pill" style="margin:4px 6px 6px 0;display:flex;justify-content:space-between;align-items:center;width:100%"><span>🚗 <b>${d.name}</b> · ${d.vehicle} · ${d.plate} · <span class="muted">${d.phone}</span></span><button class="btn ghost" data-del="${d.id}" style="padding:6px 10px">${DICT[lang].btn_delete}</button></div>`).join('');updateDriverInfo()}
+    function findDriver(id){return fleet.find(d=>d.id===id)||fleet[0]}
+    function updateDriverInfo(){const d=findDriver($('#driverSel').value);const lang=getLang();$('#driverInfo').textContent=lang==='es'?`Cel: ${d.phone} · WhatsApp: ${d.whatsapp} · Email: ${d.email}`:`Phone: ${d.phone} · WhatsApp: ${d.whatsapp} · Email: ${d.email}`}
 
-    let fleet = loadFleet();
+    function buildMapUrl(start,pickup,stopsArr,destination){const enc=encodeURIComponent;const params=[];params.push('api=1');if(start&&start.trim())params.push('origin='+enc(start.trim()));params.push('destination='+enc((destination||'').trim()));const waypoints=[];if(pickup&&pickup.trim())waypoints.push(pickup.trim());(stopsArr||[]).forEach(s=>{if(s&&s.trim())waypoints.push(s.trim())});if(waypoints.length)params.push('waypoints='+enc(waypoints.join('|')));params.push('travelmode=driving');params.push('dir_action=navigate');return 'https://www.google.com/maps/dir/?'+params.join('&')}
 
-    function getIntLS(key){ return parseInt(localStorage.getItem(key)||'0',10); }
-    function setKPI(id, n){
-      document.getElementById(id).textContent = String(n);
-      if(id==='kpiToday') localStorage.setItem('tf_today', n);
-      if(id==='kpiPending') localStorage.setItem('tf_pending', n);
-    }
-    function incToday(){ setKPI('kpiToday', getIntLS('tf_today') + 1); }
+    function accSummary(){const lang=getLang();const items=[];if($('#needWheel').checked)items.push(lang==='es'?'Silla ruedas':'Wheelchair');if($('#needBari').checked)items.push(lang==='es'?'Bariátrica':'Bariatric');if($('#needStret').checked)items.push(lang==='es'?'Camilla':'Stretcher');if($('#needOxy').checked)items.push(lang==='es'?'Oxígeno':'Oxygen');if($('#needExtra').checked)items.push(lang==='es'?'Extra personal':'Extra staff');return items.length?items.join(', '):(lang==='es'?'N/A':'N/A')}
+    function collect(){const driver=findDriver($('#driverSel').value);const start=$('#start')?.value.trim()||'';const from=$('#from').value.trim();const to=$('#to').value.trim();const rawStops=$('#stops')?.value||'';const stops=rawStops.split(/\n|,|;/).map(s=>s.trim()).filter(Boolean);const lang=getLang();const pickupAt=$('#pickupAt').value?new Date($('#pickupAt').value).toLocaleString(lang==='es'?'es-EC':'en-US'):'-';const mapUrl=to?buildMapUrl(start,from,stops,to):'';return{clientName:$('#clientName').value.trim(),clientPhone:$('#clientPhone').value.trim(),from,to,pickupAt,passenger:$('#passenger').value.trim(),age:$('#age').value.trim(),companions:$('#companions').value.trim()||'0',acc:accSummary(),floor:$('#floor').value.trim()||'0',noElev:$('#noElev').value,steps:$('#steps').value.trim()||'0',price:$('#price').value.trim(),notes:$('#notes').value.trim(),start,stops,driver,mapUrl}}
+    function preview(){const lang=getLang();const data=collect();const msg=DICT[lang].msg_template(data);$('#preview').textContent=msg;return{msg,data}}
+    function ensurePreview(){if(!$('#preview').textContent)return preview()}
 
-    const PENDING_KEY = 'tf_pending_list';
-    function getPendingList(){
-      try { return JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); }
-      catch { return []; }
-    }
-    function setPendingList(list){
-      localStorage.setItem(PENDING_KEY, JSON.stringify(list));
-    }
-    function incPending(){
-      setKPI('kpiPending', getIntLS('tf_pending') + 1);
-      const data = collect();
-      const item = {
-        id: 'p' + Date.now(),
-        when: Date.now(),
-        client: data.clientName || '(Sin cliente)',
-        passenger: data.passenger || '(Sin Pasajero)',
-        from: data.from || '',
-        to: data.to || '',
-        driver: data?.driver?.name || '',
-        price: data.price || '',
-        preview: DICT[getLang()].msg_template(data)
-      };
-      const list = getPendingList();
-      list.push(item);
-      setPendingList(list);
-    }
-    function decPending(){
-      const cur = Math.max(0, getIntLS('tf_pending') - 1);
-      setKPI('kpiPending', cur);
-      const list = getPendingList();
-      list.shift(); // FIFO
-      setPendingList(list);
-    }
+    $('#driverSel').addEventListener('change',updateDriverInfo);
+    $('#btnPreview').addEventListener('click',()=>{preview();incToday();incPending()});
+    $('#btnMap').addEventListener('click',()=>{const {data}=preview();if(!data.mapUrl){alert(getLang()==='es'?'Completa al menos el destino':'Fill at least the destination');return}$('#btnMap').href=data.mapUrl});
+    $('#btnPrint').addEventListener('click',()=>{ensurePreview();window.print();decPending()});
 
-    function paintFleet(){
-      $('#kpiDrivers').textContent = fleet.length;
-      const driverSel = $('#driverSel'); driverSel.innerHTML='';
-      fleet.forEach(d=>{
-        const opt = document.createElement('option');
-        opt.value = d.id; opt.textContent = `${d.name} • ${d.vehicle} • ${d.plate}`;
-        driverSel.appendChild(opt);
-      });
+    function openLink(u){window.open(u,'_blank','noopener')}
+    function sendWhats(){const {msg,data}=preview();const num=(data.driver.whatsapp||'').replace(/\D/g,'');if(!num)return alert('No WhatsApp');openLink(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);decPending()}
+    function sendSMS(){const {msg,data}=preview();const num=data.driver.phone||'';if(!num)return alert('No phone');const body=encodeURIComponent(msg);const url=navigator.userAgent.match(/(iPhone|iPad)/)?`sms:${num}&body=${body}`:`sms:${num}?body=${body}`;window.location.href=url;decPending()}
+    function sendEmail(){const {msg,data}=preview();const lang=getLang();const subject=encodeURIComponent(DICT[lang].msg_subject);const body=encodeURIComponent(msg);openLink(`mailto:${data.driver.email}?subject=${subject}&body=${body}`);decPending()}
+    $('#btnWA').addEventListener('click',sendWhats);
+    $('#btnSMS').addEventListener('click',sendSMS);
+    $('#btnEmail').addEventListener('click',sendEmail);
 
-      const lang = getLang();
-      const list = document.getElementById('fleetList');
-      list.innerHTML = fleet.map(d=>`
-        <div class="pill" style="margin:4px 6px 6px 0;display:flex;justify-content:space-between;align-items:center;width:100%">
-          <span>🚗 <b>${d.name}</b> · ${d.vehicle} · ${d.plate} · <span class="muted">${d.phone}</span></span>
-          <button class="btn ghost" data-del="${d.id}" style="padding:6px 10px">${DICT[lang].btn_delete}</button>
-        </div>`).join('');
-      updateDriverInfo();
-    }
-    function findDriver(id){ return fleet.find(d=>d.id===id) || fleet[0]; }
-    function updateDriverInfo(){
-      const d = findDriver($('#driverSel').value);
-      const lang=getLang();
-      $('#driverInfo').textContent = lang==='es'
-        ? `Cel: ${d.phone} · WhatsApp: ${d.whatsapp} · Email: ${d.email}`
-        : `Phone: ${d.phone} · WhatsApp: ${d.whatsapp} · Email: ${d.email}`;
-    }
+    $('#btnAddDriver').addEventListener('click',()=>{const name=prompt('Nombre del conductor');if(!name)return;const phone=prompt('Teléfono (E.164, ej +593...)')||'';const email=prompt('Email')||'';const vehicle=prompt('Vehículo/Modelo')||'';const plate=prompt('Placa')||'';const whatsapp=prompt('WhatsApp (E.164, ej +593...)')||phone;const d={id:'d'+Date.now(),name,phone,email,vehicle,plate,whatsapp,capacity:4,wheelchair:true};fleet.push(d);saveFleet(fleet);paintFleet()});
 
-    function buildMapUrl(pickup, destination){
-      const enc = encodeURIComponent;
-      const base = "https://www.google.com/maps/dir/?api=1";
-      const destParam = `destination=${enc(destination)}`;
-      const wpParam = `waypoints=${enc(pickup)}`;
-      const modeParam = `travelmode=driving`;
-      const actionParam = `dir_action=navigate`;
-      return `${base}&${destParam}&${wpParam}&${modeParam}&${actionParam}`;
-    }
+    function deleteDriver(id){const d=fleet.find(x=>x.id===id);if(!d)return;const lang=getLang();const ok=confirm(lang==='es'?`¿Eliminar a ${d.name}?`:`Delete ${d.name}?`);if(!ok)return;fleet=fleet.filter(x=>x.id!==id);saveFleet(fleet);paintFleet()}
 
-    function accSummary(){
-      const lang=getLang();
-      const items=[];
-      if($('#needWheel').checked) items.push(lang==='es'? 'Silla ruedas':'Wheelchair');
-      if($('#needBari').checked) items.push(lang==='es'? 'Bariátrica':'Bariatric');
-      if($('#needStret').checked) items.push(lang==='es'? 'Camilla':'Stretcher');
-      if($('#needOxy').checked) items.push(lang==='es'? 'Oxígeno':'Oxygen');
-      if($('#needExtra').checked) items.push(lang==='es'? 'Extra personal':'Extra staff');
-      return items.length? items.join(', ') : (lang==='es'?'N/A':'N/A');
-    }
-    function collect(){
-      const driver = findDriver($('#driverSel').value);
-      const from = $('#from').value.trim();
-      const to = $('#to').value.trim();
-      const mapUrl = (from && to) ? buildMapUrl(from, to) : '';
-      const lang=getLang();
-      const pickupAt = $('#pickupAt').value ? new Date($('#pickupAt').value).toLocaleString(lang==='es'?'es-EC':'en-US') : '-';
-      const obj = {
-        clientName: $('#clientName').value.trim(),
-        clientPhone: $('#clientPhone').value.trim(),
-        from, to, pickupAt,
-        passenger: $('#passenger').value.trim(),
-        age: $('#age').value.trim(),
-        companions: $('#companions').value.trim() || '0',
-        acc: accSummary(),
-        floor: $('#floor').value.trim() || '0',
-        noElev: $('#noElev').value,
-        steps: $('#steps').value.trim() || '0',
-        price: $('#price').value.trim(),
-        notes: $('#notes').value.trim(),
-        driver, mapUrl
-      };
-      return obj;
-    }
-    function preview(){
-      const lang=getLang();
-      const data=collect();
-      const msg = DICT[lang].msg_template(data);
-      $('#preview').textContent = msg;
-      return {msg, data};
-    }
-    function ensurePreview(){ if(!$('#preview').textContent) return preview(); }
+    document.getElementById('fleetList').addEventListener('click',(e)=>{const btn=e.target.closest('button[data-del]');if(!btn)return;deleteDriver(btn.getAttribute('data-del'))});
+    document.getElementById('btnResetDrivers').addEventListener('click',()=>{const lang=getLang();const ok=confirm(lang==='es'?'Esto reemplazará la flota actual por la flota por defecto. ¿Continuar?':'This will replace the current fleet with the default fleet. Continue?');if(!ok)return;fleet=JSON.parse(JSON.stringify(DEFAULT_DRIVERS));saveFleet(fleet);paintFleet()});
 
-    $('#driverSel').addEventListener('change', updateDriverInfo);
-    $('#btnPreview').addEventListener('click', ()=>{
-      preview();
-      incToday();
-      incPending();
-    });
+    setKPI('kpiToday',getIntLS('tf_today'));setKPI('kpiPending',getIntLS('tf_pending'));
+    function getLangForced(){return localStorage.getItem('tf_lang_forced')||'auto'}function setLangForced(v){localStorage.setItem('tf_lang_forced',v)}
+    applyI18n();const sel=$('#langSel');sel.value=getLangForced();sel.addEventListener('change',()=>{setLangForced(sel.value);applyI18n();preview();paintFleet()});
 
-    $('#btnMap').addEventListener('click', ()=>{
-      const {data}=preview();
-      if(!data.mapUrl){ alert(getLang()==='es'? 'Completa origen y destino':'Fill origin and destination'); return; }
-      $('#btnMap').href = data.mapUrl;
-    });
+    document.getElementById('openHowTo').addEventListener('click',(e)=>{e.preventDefault();document.getElementById('howTo').showModal()});
+    if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js?v=tripfast-v9').catch(()=>{})})}
 
-    $('#btnPrint').addEventListener('click', ()=>{
-      ensurePreview();
-      window.print();
-      decPending();
-    });
+    (function setupInstallBubble(){const installBtn=document.getElementById('btnInstall');let deferredPrompt=null;function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}function refreshInstallVisibility(){installBtn.style.display=isStandalone()?'none':'inline-flex'}refreshInstallVisibility();window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;refreshInstallVisibility();installBtn.onclick=async()=>{if(!deferredPrompt)return;installBtn.disabled=true;try{deferredPrompt.prompt();const { outcome }=await deferredPrompt.userChoice;if(outcome==='accepted')installBtn.style.display='none'}finally{installBtn.disabled=false;deferredPrompt=null}}});window.addEventListener('appinstalled',()=>{installBtn.style.display='none';deferredPrompt=null});document.addEventListener('visibilitychange',refreshInstallVisibility)})();
 
-    function openLink(u){ window.open(u, '_blank', 'noopener'); }
-    function sendWhats(){
-      const {msg,data}=preview();
-      const num = (data.driver.whatsapp||'').replace(/\D/g,'');
-      if(!num) return alert('No WhatsApp');
-      openLink(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
-      decPending();
-    }
-    function sendSMS(){
-      const {msg,data}=preview();
-      const num = data.driver.phone || '';
-      if(!num) return alert('No phone');
-      const body = encodeURIComponent(msg);
-      const url = navigator.userAgent.match(/(iPhone|iPad)/) ? `sms:${num}&body=${body}` : `sms:${num}?body=${body}`;
-      window.location.href = url;
-      decPending();
-    }
-    function sendEmail(){
-      const {msg,data}=preview();
-      const lang=getLang();
-      const subject = encodeURIComponent(DICT[lang].msg_subject);
-      const body = encodeURIComponent(msg);
-      openLink(`mailto:${data.driver.email}?subject=${subject}&body=${body}`);
-      decPending();
-    }
-    $('#btnWA').addEventListener('click', sendWhats);
-    $('#btnSMS').addEventListener('click', sendSMS);
-    $('#btnEmail').addEventListener('click', sendEmail);
+    (function setupPendingManager(){const dlg=document.getElementById('pendingDlg');const listEl=document.getElementById('pendingList');const infoEl=document.getElementById('pendingInfo');const btnClear=document.getElementById('btnPendingClear');const btnClose=document.getElementById('btnPendingClose');const pendingCard=document.querySelector('.kpis .kpi:nth-child(2)');function setManageTitle(){pendingCard.title=DICT[getLang()].title_pending_manage}if(pendingCard){pendingCard.style.cursor='pointer';setManageTitle();pendingCard.addEventListener('click',()=>{renderPending();dlg.showModal()})}function renderPending(){const lang=getLang();const T=DICT[lang];const list=getPendingList();if(!list.length){infoEl.textContent=T.pending_none}else if(list.length===1){infoEl.textContent=T.pending_count_one}else{infoEl.textContent=T.pending_count_many.replace('{n}',String(list.length))}if(!list.length){listEl.textContent=T.pending_empty;return}listEl.innerHTML=list.map(it=>{const fecha=new Date(it.when).toLocaleString(lang==='es'?'es-EC':'en-US');return `<div style="border-bottom:1px dashed #30456f; padding:8px 0"><div><b>${it.client}</b> — ${it.passenger}</div><div class="muted" style="font-size:12px">${fecha} • ${it.from} → ${it.to} • ${it.driver || '—'}</div><div style="margin-top:6px; display:flex; gap:8px; flex-wrap:wrap"><button class="btn" data-resolve="${it.id}">${T.btn_pending_resolve}</button><button class="btn ghost" data-remove="${it.id}">${T.btn_pending_remove}</button><button class="btn ghost" data-preview="${it.id}">${T.btn_pending_preview}</button></div></div>`}).join('')}listEl.addEventListener('click',(e)=>{const btnResolve=e.target.closest('button[data-resolve]');const btnRemove=e.target.closest('button[data-remove]');const btnPrev=e.target.closest('button[data-preview]');if(!btnResolve&&!btnRemove&&!btnPrev)return;let list=getPendingList();if(btnPrev){const id=btnPrev.getAttribute('data-preview');const item=list.find(x=>x.id===id);if(item)alert(item.preview);return}if(btnResolve){const id=btnResolve.getAttribute('data-resolve');list=list.filter(x=>x.id!==id);setPendingList(list);setKPI('kpiPending',list.length);renderPending();return}if(btnRemove){const id=btnRemove.getAttribute('data-remove');list=list.filter(x=>x.id!==id);setPendingList(list);setKPI('kpiPending',list.length);renderPending();return}});btnClear.addEventListener('click',(e)=>{e.preventDefault();const T=DICT[getLang()];if(confirm(T.confirm_pending_clear)){setPendingList([]);setKPI('kpiPending',0);renderPending()}});btnClose.addEventListener('click',(e)=>{e.preventDefault();dlg.close()});document.getElementById('langSel').addEventListener('change',setManageTitle)})();
 
-    $('#btnAddDriver').addEventListener('click', ()=>{
-      const name = prompt('Nombre del conductor'); if(!name) return;
-      const phone = prompt('Teléfono (E.164, ej +593...)')||'';
-      const email = prompt('Email')||'';
-      const vehicle = prompt('Vehículo/Modelo')||'';
-      const plate = prompt('Placa')||'';
-      const whatsapp = prompt('WhatsApp (E.164, ej +593...)')||phone;
-      const d = {id: 'd'+(Date.now()), name, phone, email, vehicle, plate, whatsapp, capacity:4, wheelchair:true};
-      fleet.push(d); saveFleet(fleet); paintFleet();
-    });
+    let backupFileHandle=null;async function setupBackup(){if(!window.showSaveFilePicker){alert('Tu navegador no soporta copia automática.\nUsa Export/Import manual.');return}try{backupFileHandle=await window.showSaveFilePicker({suggestedName:'tripfast-backup.json',types:[{description:'JSON',accept:{'application/json':['.json']}}]});await writeFullBackup();alert('Respaldo configurado ✔️. Guardaremos los cambios automáticamente.')}catch(err){}}async function writeFile(handle,contents){const writable=await handle.createWritable();await writable.write(contents);await writable.close()}async function writeFullBackup(){if(!backupFileHandle)return;const dump={fleet,lastForm:collect(),ts:Date.now()};try{await writeFile(backupFileHandle,JSON.stringify(dump,null,2))}catch(e){}}
+    const _saveFleetOrig=saveFleet;saveFleet=function(list){_saveFleetOrig(list);writeFullBackup()};
+    document.getElementById('btnSetupBackup').addEventListener('click',setupBackup);
+    document.getElementById('btnBackupNow').addEventListener('click',()=>writeFullBackup());
 
-    function deleteDriver(id){
-      const d = fleet.find(x=>x.id===id);
-      if(!d) return;
-      const lang = getLang();
-      const ok = confirm(lang==='es' ? `¿Eliminar a ${d.name}?` : `Delete ${d.name}?`);
-      if(!ok) return;
-      fleet = fleet.filter(x=>x.id!==id);
-      saveFleet(fleet);
-      paintFleet();
-    }
-
-    document.getElementById('fleetList').addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-del]');
-      if(!btn) return;
-      deleteDriver(btn.getAttribute('data-del'));
-    });
-
-    document.getElementById('btnResetDrivers').addEventListener('click', ()=>{
-      const lang = getLang();
-      const ok = confirm(lang==='es'
-        ? 'Esto reemplazará la flota actual por la flota por defecto. ¿Continuar?'
-        : 'This will replace the current fleet with the default fleet. Continue?');
-      if(!ok) return;
-      fleet = JSON.parse(JSON.stringify(DEFAULT_DRIVERS));
-      saveFleet(fleet);
-      paintFleet();
-    });
-
-    setKPI('kpiToday', getIntLS('tf_today'));
-    setKPI('kpiPending', getIntLS('tf_pending'));
-
-    function getLangForced(){ return localStorage.getItem('tf_lang_forced')||'auto'; }
-    function setLangForced(v){ localStorage.setItem('tf_lang_forced', v); }
-    applyI18n();
-    const sel=$('#langSel'); sel.value=getLangForced();
-    sel.addEventListener('change',()=>{ setLangForced(sel.value); applyI18n(); preview(); paintFleet(); });
-
-    document.getElementById('openHowTo').addEventListener('click',(e)=>{
-      e.preventDefault(); 
-      document.getElementById('howTo').showModal();
-    });
-
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', ()=>{
-        navigator.serviceWorker.register('./sw.js?v=tripfast-v8').then(()=>{
-          const pill = document.getElementById('statusPWA');
-          if (pill) pill.classList.add('ok');
-        }).catch(()=>{});
-      })
-    }
-
-    (function setupInstallBubble(){
-      const installBtn = document.getElementById('btnInstall');
-      let deferredPrompt = null;
-      function isStandalone(){
-        return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-      }
-      function refreshInstallVisibility(){
-        installBtn.style.display = isStandalone() ? 'none' : 'inline-flex';
-      }
-      refreshInstallVisibility();
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        refreshInstallVisibility();
-
-        installBtn.onclick = async () => {
-          if(!deferredPrompt) return;
-          installBtn.disabled = true;
-          try{
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-              installBtn.style.display = 'none';
-            }
-          } finally {
-            installBtn.disabled = false;
-            deferredPrompt = null;
-          }
-        };
-      });
-
-      window.addEventListener('appinstalled', () => {
-        installBtn.style.display = 'none';
-        deferredPrompt = null;
-      });
-
-      document.addEventListener('visibilitychange', refreshInstallVisibility);
-    })();
-
-    (function setupPendingManager(){
-      const dlg = document.getElementById('pendingDlg');
-      const listEl = document.getElementById('pendingList');
-      const infoEl = document.getElementById('pendingInfo');
-      const btnClear = document.getElementById('btnPendingClear');
-      const btnClose = document.getElementById('btnPendingClose');
-
-      const pendingCard = document.querySelector('.kpis .kpi:nth-child(2)');
-      function setManageTitle(){
-        pendingCard.title = DICT[getLang()].title_pending_manage;
-      }
-      if (pendingCard) {
-        pendingCard.style.cursor = 'pointer';
-        setManageTitle();
-        pendingCard.addEventListener('click', () => {
-          renderPending();
-          dlg.showModal();
-        });
-      }
-
-      function renderPending(){
-        const lang = getLang();
-        const T = DICT[lang];
-        const list = getPendingList();
-
-        if (!list.length){
-          infoEl.textContent = T.pending_none;
-        } else if (list.length === 1){
-          infoEl.textContent = T.pending_count_one;
-        } else {
-          infoEl.textContent = T.pending_count_many.replace('{n}', String(list.length));
-        }
-
-        if (!list.length){
-          listEl.textContent = T.pending_empty;
-          return;
-        }
-
-        listEl.innerHTML = list.map(it => {
-          const fecha = new Date(it.when).toLocaleString(lang==='es'?'es-EC':'en-US');
-          return `
-<div style="border-bottom:1px dashed #30456f; padding:8px 0">
-  <div><b>${it.client}</b> — ${it.passenger}</div>
-  <div class="muted" style="font-size:12px">${fecha} • ${it.from} → ${it.to} • ${it.driver || '—'}</div>
-  <div style="margin-top:6px; display:flex; gap:8px; flex-wrap:wrap">
-    <button class="btn" data-resolve="${it.id}">${T.btn_pending_resolve}</button>
-    <button class="btn ghost" data-remove="${it.id}">${T.btn_pending_remove}</button>
-    <button class="btn ghost" data-preview="${it.id}">${T.btn_pending_preview}</button>
-  </div>
-</div>`;
-        }).join('');
-      }
-
-      listEl.addEventListener('click', (e)=>{
-        const btnResolve = e.target.closest('button[data-resolve]');
-        const btnRemove  = e.target.closest('button[data-remove]');
-        const btnPrev    = e.target.closest('button[data-preview]');
-        if (!btnResolve && !btnRemove && !btnPrev) return;
-
-        let list = getPendingList();
-
-        if (btnPrev){
-          const id = btnPrev.getAttribute('data-preview');
-          const item = list.find(x=>x.id===id);
-          if (item) alert(item.preview);
-          return;
-        }
-
-        if (btnResolve){
-          const id = btnResolve.getAttribute('data-resolve');
-          list = list.filter(x=>x.id!==id);
-          setPendingList(list);
-          setKPI('kpiPending', list.length);
-          renderPending();
-          return;
-        }
-
-        if (btnRemove){
-          const id = btnRemove.getAttribute('data-remove');
-          list = list.filter(x=>x.id!==id);
-          setPendingList(list);
-          setKPI('kpiPending', list.length);
-          renderPending();
-          return;
-        }
-      });
-
-      btnClear.addEventListener('click', (e)=>{
-        e.preventDefault();
-        const T = DICT[getLang()];
-        if (confirm(T.confirm_pending_clear)){
-          setPendingList([]);
-          setKPI('kpiPending', 0);
-          renderPending();
-        }
-      });
-
-      btnClose.addEventListener('click', (e)=>{
-        e.preventDefault();
-        dlg.close();
-      });
-
-      document.getElementById('langSel').addEventListener('change', setManageTitle);
-    })();
-
-    let backupFileHandle = null;
-    async function setupBackup(){
-      if(!window.showSaveFilePicker){
-        alert('Tu navegador no soporta copia automática.\nUsa Export/Import manual.');
-        return;
-      }
-      try{
-        backupFileHandle = await window.showSaveFilePicker({
-          suggestedName: 'tripfast-backup.json',
-          types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
-        });
-        await writeFullBackup();
-        alert('Respaldo configurado ✔️. Guardaremos los cambios automáticamente.');
-      }catch(err){}
-    }
-    async function writeFile(handle, contents){
-      const writable = await handle.createWritable();
-      await writable.write(contents);
-      await writable.close();
-    }
-    async function writeFullBackup(){
-      if(!backupFileHandle) return;
-      const dump = { fleet, lastForm: collect(), ts: Date.now() };
-      try{ await writeFile(backupFileHandle, JSON.stringify(dump,null,2)); }catch(e){}
-    }
-    const _saveFleetOrig = saveFleet;
-    saveFleet = function(list){ _saveFleetOrig(list); writeFullBackup(); };
-
-    document.getElementById('btnSetupBackup').addEventListener('click', setupBackup);
-    document.getElementById('btnBackupNow').addEventListener('click', ()=>writeFullBackup());
-
-    paintFleet(); preview();
+    paintFleet();preview();
   </script>
 
-  <!-- 3) Módulo NUEVO: crea Job en Firestore + Vista Driver + Login/Logout -->
   <script type="module">
     import { createJob, onAuth, login, logout, setupMessagingForDriver, listenDriverJobs, updateJobStatus } from './firebase.js';
+    function attachJobCreator(){const btn=document.getElementById('btnPreview');if(!btn||btn.__tfJobAttached)return;btn.__tfJobAttached=true;btn.addEventListener('click',async()=>{try{if(typeof preview!=='function')return;const { data }=preview();const job={client:data.clientName||'',client_phone:data.clientPhone||'',from:data.from||'',to:data.to||'',start:data.start||'',stops:data.stops||[],pickup_at:data.pickupAt||'',passenger:data.passenger||'',age:data.age||null,companions:data.companions||0,acc:data.acc||'',floor:data.floor||'0',no_elev:data.noElev||'no',steps:data.steps||'0',price:data.price||null,notes:data.notes||'',map_url:data.mapUrl||'',driver_id:(data.driver&&data.driver.id)?data.driver.id:(typeof findDriver==='function'?findDriver(document.getElementById('driverSel').value).id:null)};await createJob(job)}catch(err){const es=(typeof getLang==='function'?getLang():'es')==='es';alert(es?'Inicia sesión (botón Iniciar sesión) para enviar el despacho al conductor.':'Please sign in (Login button) to send the job to the driver.');console.warn('[TripFast] createJob failed:',err)}},{passive:true})}
+    window.addEventListener('load',attachJobCreator);setTimeout(attachJobCreator,800);
 
-    function attachJobCreator(){
-      const btn = document.getElementById('btnPreview');
-      if(!btn || btn.__tfJobAttached) return;
-      btn.__tfJobAttached = true;
-      btn.addEventListener('click', async ()=>{
-        try{
-          if (typeof preview !== 'function') return;
-          const { data } = preview();
-          const job = {
-            client: data.clientName || '',
-            client_phone: data.clientPhone || '',
-            from: data.from || '',
-            to: data.to || '',
-            pickup_at: data.pickupAt || '',
-            passenger: data.passenger || '',
-            age: data.age || null,
-            companions: data.companions || 0,
-            acc: data.acc || '',
-            floor: data.floor || '0',
-            no_elev: data.noElev || 'no',
-            steps: data.steps || '0',
-            price: data.price || null,
-            notes: data.notes || '',
-            map_url: data.mapUrl || '',
-            driver_id: (data.driver && data.driver.id) ? data.driver.id : (typeof findDriver==='function' ? findDriver(document.getElementById('driverSel').value).id : null)
-          };
-          await createJob(job);
-        }catch(err){
-          const es = (typeof getLang==='function' ? getLang() : 'es') === 'es';
-          alert(es ? 'Inicia sesión (botón Login) para enviar el despacho al conductor.'
-                   : 'Please sign in (Login button) to send the job to the driver.');
-          console.warn('[TripFast] createJob failed:', err);
-        }
-      }, { passive:true });
-    }
-    window.addEventListener('load', attachJobCreator);
-    setTimeout(attachJobCreator, 800);
+    const drvSection=document.getElementById('driverView');
+    const consoleGrid=document.getElementById('consoleGrid');
+    const btnLogin=document.getElementById('btnLogin');
+    const btnLogout=document.getElementById('btnLogout');
+    const listEl=document.getElementById('driverJobs');
+    const btnPush=document.getElementById('drvRegisterPush');
 
-    const drvSection  = document.getElementById('driverView');
-    const consoleGrid = document.querySelector('.grid');
-    const btnLogin    = document.getElementById('btnLogin');
-    const btnLogout   = document.getElementById('btnLogout');
-    const listEl      = document.getElementById('driverJobs');
-    const btnPush     = document.getElementById('drvRegisterPush');
-
-    function showDriverView(show){
-      if(!drvSection || !consoleGrid) return;
-      drvSection.style.display = show ? 'block' : 'none';
-      consoleGrid.style.display = show ? 'none' : 'grid';
-    }
-    function renderJobs(items){
-      const lang = (typeof getLang==='function' ? getLang() : 'es');
-      if (!listEl) return;
-      listEl.innerHTML = items.map(j => `
-        <div class="card" style="margin:10px 0">
-          <div><b>${j.passenger || '-'}</b> — $${j.price || '-'} • <span class="muted">${j.status}</span></div>
-          <div class="muted" style="font-size:12px">${j.from} → ${j.to}</div>
-          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
-            <a class="btn" href="${j.map_url}" target="_blank" rel="noopener">${lang==='es'?'Navegar':'Navigate'}</a>
-            ${j.status==='sent' ? `<button class="btn" data-acc="${j.id}">${lang==='es'?'Aceptar':'Accept'}</button>` : ''}
-            ${j.status==='sent' ? `<button class="btn ghost" data-rej="${j.id}">${lang==='es'?'Rechazar':'Reject'}</button>` : ''}
-            ${j.status==='accepted' ? `<button class="btn" data-onr="${j.id}">${lang==='es'?'En ruta':'On route'}</button>` : ''}
-            ${j.status==='onroute' ? `<button class="btn" data-arr="${j.id}">${lang==='es'?'Llegué':'Arrived'}</button>` : ''}
-            ${j.status==='arrived' ? `<button class="btn" data-abo="${j.id}">${lang==='es'?'A bordo':'Aboard'}</button>` : ''}
-            ${j.status==='aboard' ? `<button class="btn" data-done="${j.id}">${lang==='es'?'Finalizar':'Done'}</button>` : ''}
-          </div>
-        </div>`).join('');
-    }
-    if (listEl){
-      listEl.addEventListener('click', async (e)=>{
-        const el = e.target;
-        const id = el.getAttribute('data-acc') || el.getAttribute('data-rej') || el.getAttribute('data-onr') || el.getAttribute('data-arr') || el.getAttribute('data-abo') || el.getAttribute('data-done');
-        if(!id) return;
-        const map = { acc:'accepted', rej:'rejected', onr:'onroute', arr:'arrived', abo:'aboard', done:'done' };
-        const code = el.hasAttribute('data-acc') ? 'acc' :
-                     el.hasAttribute('data-rej') ? 'rej' :
-                     el.hasAttribute('data-onr') ? 'onr' :
-                     el.hasAttribute('data-arr') ? 'arr' :
-                     el.hasAttribute('data-abo') ? 'abo' : 'done';
-        try{ await updateJobStatus(id, map[code], 'driver'); }catch(err){ console.warn(err); }
-      });
-    }
+    function showDriverView(show){if(!drvSection||!consoleGrid)return;drvSection.style.display=show?'block':'none';consoleGrid.style.display=show?'none':'grid'}
+    function renderJobs(items){const lang=(typeof getLang==='function'?getLang():'es');if(!listEl)return;listEl.innerHTML=items.map(j=>`<div class="card" style="margin:10px 0"><div><b>${j.passenger || '-'}</b> — $${j.price || '-'} • <span class="muted">${j.status}</span></div><div class="muted" style="font-size:12px">${j.from} → ${j.to}</div><div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap"><a class="btn" href="${j.map_url}" target="_blank" rel="noopener">${lang==='es'?'Navegar':'Navigate'}</a>${j.status==='sent'?`<button class="btn" data-acc="${j.id}">${lang==='es'?'Aceptar':'Accept'}</button>`:''}${j.status==='sent'?`<button class="btn ghost" data-rej="${j.id}">${lang==='es'?'Rechazar':'Reject'}</button>`:''}${j.status==='accepted'?`<button class="btn" data-onr="${j.id}">${lang==='es'?'En ruta':'On route'}</button>`:''}${j.status==='onroute'?`<button class="btn" data-arr="${j.id}">${lang==='es'?'Llegué':'Arrived'}</button>`:''}${j.status==='arrived'?`<button class="btn" data-abo="${j.id}">${lang==='es'?'A bordo':'Aboard'}</button>`:''}${j.status==='aboard'?`<button class="btn" data-done="${j.id}">${lang==='es'?'Finalizar':'Done'}</button>`:''}</div></div>`).join('')}
+    if(listEl){listEl.addEventListener('click',async(e)=>{const el=e.target;const id=el.getAttribute('data-acc')||el.getAttribute('data-rej')||el.getAttribute('data-onr')||el.getAttribute('data-arr')||el.getAttribute('data-abo')||el.getAttribute('data-done');if(!id)return;const map={acc:'accepted',rej:'rejected',onr:'onroute',arr:'arrived',abo:'aboard',done:'done'};const code=el.hasAttribute('data-acc')?'acc':el.hasAttribute('data-rej')?'rej':el.hasAttribute('data-onr')?'onr':el.hasAttribute('data-arr')?'arr':el.hasAttribute('data-abo')?'abo':'done';try{await updateJobStatus(id,map[code],'driver')}catch(err){console.warn(err)}})}
 
     onAuth(async (user)=>{
-      if(!user){
-        if (btnLogin) btnLogin.style.display = 'inline-flex';
-        if (btnLogout) btnLogout.style.display = 'none';
-        showDriverView(false);
-        return;
-      }
-      const token = await user.getIdTokenResult(true);
-      const role = token.claims.role;
-      const driverId = token.claims.driver_id;
-      if (btnLogin) btnLogin.style.display = 'none';
-      if (btnLogout) btnLogout.style.display = 'inline-flex';
-      if(role === 'driver'){
-        showDriverView(true);
-        if (btnPush) btnPush.onclick = ()=>setupMessagingForDriver(driverId);
-        listenDriverJobs(driverId, renderJobs);
-      } else {
-        showDriverView(false);
-      }
+      if(!user){if(btnLogin)btnLogin.style.display='inline-flex';if(btnLogout)btnLogout.style.display='none';if(drvSection)drvSection.style.display='none';if(consoleGrid)consoleGrid.style.display='none';return;}
+      const token=await user.getIdTokenResult(true);
+      const role=token.claims.role;
+      const driverId=token.claims.driver_id;
+      if(btnLogin)btnLogin.style.display='none';
+      if(btnLogout)btnLogout.style.display='inline-flex';
+      if(role==='driver'){showDriverView(true);if(btnPush)btnPush.onclick=()=>setupMessagingForDriver(driverId);listenDriverJobs(driverId,renderJobs)}
+      else{showDriverView(false);consoleGrid.style.display='grid'}
     });
 
-    if (btnLogin){
-      btnLogin.addEventListener('click', async()=>{
-        const email = prompt('Email'); if(!email) return;
-        const pass  = prompt((typeof getLang==='function' && getLang()==='es')?'Contraseña':'Password'); if(!pass) return;
-        try{ await login(email, pass); }catch(err){ alert(err.message || String(err)); }
-      });
-    }
-    if (btnLogout){ btnLogout.addEventListener('click', ()=>logout()); }
+    if(btnLogin){btnLogin.addEventListener('click',async()=>{const email=prompt('Email');if(!email)return;const pass=prompt((typeof getLang==='function'&&getLang()==='es')?'Contraseña':'Password');if(!pass)return;try{await login(email,pass)}catch(err){alert(err.message||String(err))}})}
+    if(btnLogout){btnLogout.addEventListener('click',()=>logout())}
   </script>
 
-  <!-- Diálogos existentes (instalación y pendientes) -->
   <dialog id="howTo">
     <form method="dialog" style="margin:0">
       <div style="padding:16px 16px 4px"><b data-i18n="dlg_howto_title">Instalar en iPhone/iPad</b></div>
@@ -962,15 +377,3 @@ Plate: ${o.driver.plate}
   </dialog>
 </body>
 </html>
-
-
-
-
-         
-
-
-
-
-
-
-
